@@ -1,6 +1,6 @@
 /*
  * Cart - drag-and-drop .deb installer
- * Copyright (c) 2026 [Your Name]
+ * Copyright (c) 2026 [owakcx2014]
  * SPDX-License-Identifier: MIT
  */
 
@@ -114,6 +114,38 @@ load_themed_icon(const gchar *names[], gint size)
         pb = gtk_icon_info_load_icon(info, NULL);
         g_object_unref(info);
     }
+    return pb;
+}
+
+static GdkPixbuf *
+load_bundled_folder_icon(gint size)
+{
+    const gchar *file = "folder-template.svg";
+    gchar *exe = g_file_read_link("/proc/self/exe", NULL);
+    gchar *exe_dir = exe ? g_path_get_dirname(exe) : NULL;
+    gchar *cwd = g_get_current_dir();
+    gchar *paths[6];
+    GdkPixbuf *pb = NULL;
+    guint i;
+
+    paths[0] = exe_dir ? g_build_filename(exe_dir, "assets", file, NULL) : NULL;
+    paths[1] = g_build_filename(cwd, "assets", file, NULL);
+    paths[2] = exe_dir ? g_build_filename(exe_dir, "..", "share", "cart", "assets", file, NULL) : NULL;
+    paths[3] = g_build_filename("/usr/local/share/cart/assets", file, NULL);
+    paths[4] = g_build_filename("/usr/share/cart/assets", file, NULL);
+    paths[5] = NULL;
+
+    for (i = 0; i < 5 && !pb; i++) {
+        if (paths[i] && g_file_test(paths[i], G_FILE_TEST_IS_REGULAR))
+            pb = gdk_pixbuf_new_from_file_at_scale(paths[i], size, size,
+                                                   TRUE, NULL);
+    }
+
+    for (i = 0; i < 5; i++)
+        g_free(paths[i]);
+    g_free(cwd);
+    g_free(exe_dir);
+    g_free(exe);
     return pb;
 }
 
@@ -896,7 +928,9 @@ build_ui(AppState *s)
     gtk_label_set_text(GTK_LABEL(folder_name), "Applications");
     gtk_box_pack_start(GTK_BOX(row), s->folder_slot, FALSE, FALSE, 0);
 
-    pb = load_themed_icon(folder_names, ICON_SIZE);
+    pb = load_bundled_folder_icon(ICON_SIZE);
+    if (!pb)
+        pb = load_themed_icon(folder_names, ICON_SIZE);
     if (pb) {
         gtk_image_set_from_pixbuf(GTK_IMAGE(folder_img), pb);
         g_object_unref(pb);
