@@ -35,6 +35,7 @@ gcc cart.c -o cart $(pkg-config --cflags --libs gtk+-3.0)
 ./cart                 # then drop a .deb onto the window
 ./cart package.deb     # or open a package directly
 ```
+or Just make the binary is the default app for opening `.deb` files 
 
 ## License
 
