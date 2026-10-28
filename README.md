@@ -17,23 +17,20 @@ A small GTK3 app that installs `.deb` packages the way macOS installs apps from 
 - `dpkg`, `apt`, `sudo`, `tar`
 - A C compiler
 
-On Debian/Ubuntu/KDE neon:
+
+
+## Build & install
 
 ```sh
-sudo apt install build-essential libgtk-3-dev pkg-config
-```
-
-## Build
-
-```sh
-gcc cart.c -o cart $(pkg-config --cflags --libs gtk+-3.0)
+chmod +x install.sh
+./install.sh
 ```
 
 ## Usage
 
 ```sh
-./cart                 # then drop a .deb onto the window
-./cart package.deb     # or open a package directly
+cart                 # then drop a .deb onto the window
+cart package.deb     # or open a package directly
 ```
 or Just make the binary is the default app for opening `.deb` files 
 
