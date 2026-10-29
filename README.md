@@ -17,7 +17,7 @@ A small GTK3 app that installs `.deb` packages the way macOS installs apps from 
 - `dpkg`, `apt`, `sudo`, `tar`
 - A C compiler
 
-
+![Cart Preview](preview.png)
 
 ## Build & install
 
