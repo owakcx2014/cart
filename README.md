@@ -22,6 +22,8 @@ A small GTK3 app that installs `.deb` packages the way macOS installs apps from 
 ## Build & install
 
 ```sh
+#clone the repo
+git clone https://github.com/owakcx2014/cart.git && cd cart
 chmod +x install.sh
 ./install.sh
 ```
